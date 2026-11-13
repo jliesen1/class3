@@ -33,7 +33,7 @@ HUNTER_SPEED = 11.5               # The RED guard is faster initially.
 HUNTER_TURN_SPEED = 4.5
 PLAYER_START = (-7.1, -6.8)
 HUNTER_START = (0.4, 1.5)       # Original guard's starting location.
-GUARD_COUNT = 1                   # 1 = normal, 2 = difficult, 3 = CHAOS!
+GUARD_COUNT = 3                   # 1 = normal, 2 = difficult, 3 = CHAOS!
 # New guards begin in separate parts of the arena (away from walls and boxes).
 GUARD_STARTS = [HUNTER_START, (-6.2, 3.2), (6.3, -2.3)]
 GUARD_COLORS = [(1.0, 0.16, 0.18), (1.0, 0.42, 0.12), (0.93, 0.14, 0.45)]
@@ -444,10 +444,11 @@ def update_mission(player_id, game):
         if index in game["collected"]:
             continue
 
-        x_difference = 0.0  # TODO 1A: Calculate X difference
-        y_difference = 0.0  # TODO 1B: Calculate Y difference
-
-        distance = float("inf")  # TODO 1C: Use math.hypot()
+        x_difference = player_x - treasure[0]
+        
+        y_difference = player_y - treasure[1]
+        
+        distance = math.hypot(x_difference, y_difference) 
 
 
         # --------------------------------------------------------------
@@ -467,13 +468,12 @@ def update_mission(player_id, game):
         #
         # Hints: and, not in, .add(), +=
 
-        if False:  # TODO 2A: Replace False with your condition.
+        if index not in game["collected"] and distance < TREASURE_RADIUS:
+            game["collected"].add(index)
+            game["score"] = game["score"] + TREASURE_POINTS
+            celebrate_treasure(game, index)
 
-            pass  # TODO 2B: Record the collected treasure.
-
-            pass  # TODO 2C: Increase the score.
-
-            pass  # TODO 2D: Call the celebration function.
+            
 
 
     # ------------------------------------------------------------------
@@ -492,15 +492,14 @@ def update_mission(player_id, game):
     #   - Each treasure is worth TREASURE_POINTS.
     #   - Compare the player's score with the maximum score.
 
-    maximum_score = 0  # TODO 3A: Calculate maximum possible score.
-
-    if False:  # TODO 3B: Replace False with your winning condition.
-
-        pass  # TODO 3C: Update game["result"].
-
-        pass  # TODO 3D: Print the victory message.
+    maximum_score = len(TREASURE_SPOTS) * TREASURE_POINTS
 
 
+    if game["score"] >= maximum_score:
+        game["result"] ="WIN"
+        print("Mission Complete! You collected all the treasures")
+
+   
         # --------------------------------------------------------------
         # TASK 4 — CALCULATE AND DISPLAY COMPLETION TIME
         # --------------------------------------------------------------
@@ -517,9 +516,8 @@ def update_mission(player_id, game):
         #   - PHYSICS_HZ contains the steps per simulated second.
         #   - Use :.1f to display one decimal place.
 
-        completion_time = 0.0  # TODO 4A: Calculate elapsed seconds.
-
-        pass  # TODO 4B: Print completion_time using an f-string.
+        completion_time = game["step"] /PHYSICS_HZ
+        print(f"Completion time : {completion_time} seconds")
 
 def update_guard(player_id, guard, game):
     """Each guard has a personal patrol index, alert timer, and navigation state."""
