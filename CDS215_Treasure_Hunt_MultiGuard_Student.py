@@ -576,7 +576,7 @@ def status_hud(game, player_id, guards, force=False):
         label = f"CAUGHT! SCORE {game['score']}/{total} | R = RETRY | Q = QUIT"
         rgb = [1, 0.27, 0.26]
     elif game["result"] == "TIMEOUT":
-        label = f"TIME UP! SCORE {game['score']}/{total} | R = RETRY | Q = QUIT"
+        label = f"TIME UP!  SCORE {game['score']}/{total} | R = RETRY | Q = QUIT"
         rgb = [1, 0.27, 0.26]
     else:
         label = (f"TREASURE HUNT | {game['score']:02d}/{total} POINTS | "
